@@ -1,0 +1,37 @@
+{
+  "private" : true,
+  "name": "es-ast-walker",
+  "version": "0.0.0",
+  "description": "Recursively walk and transform EcmaScript AST",
+  "main": "lib/walker.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node ./node_modules/.bin/jasmine-node test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/millermedeiros/es-ast-walker.git"
+  },
+  "keywords": [
+    "ast",
+    "walk",
+    "syntax",
+    "source",
+    "tree",
+    "traversal",
+    "falafel",
+    "burrito",
+    "esprima"
+  ],
+  "author": "Miller Medeiros <http://blog.millermedeiros.com>",
+  "license": "MIT",
+  "dependencies": {
+    "esprima": "~1.0.2",
+    "amd-utils": "~0.8.1"
+  }
+  "devDependencies" : {
+    "jasmine-node": "~1.0.26"
+  }
+}
