@@ -35,14 +35,14 @@ describe('parse', function () {
             expect( block.parent ).toEqual( fnExpression );
         });
 
-        it('should add source() method', function () {
+        it('toString should return the node source', function () {
             expect( returnStatement.type ).toEqual( 'ReturnStatement' );
-            expect( returnStatement.source() ).toEqual( 'return 123 ' );
+            expect( returnStatement.toString() ).toEqual( 'return 123 ' );
         });
 
         it('should add update() method', function () {
             returnStatement.update('return "foo"');
-            expect( returnStatement.source() ).toEqual( 'return "foo"' );
+            expect( returnStatement.toString() ).toEqual( 'return "foo"' );
         });
 
         it('should add depth property to nodes', function () {
@@ -141,6 +141,23 @@ describe('parse', function () {
         });
 
     });
+
+
+    describe('Token', function () {
+
+        it('should instrument tokens', function () {
+            var ast = walker.parse('function foo(){ return "bar"; }');
+            var tokens = ast.tokens;
+            expect( tokens[0].index ).toEqual( 0 );
+            expect( tokens[1].index ).toEqual( 1 );
+            expect( tokens[0].prev ).toBeUndefined();
+            expect( tokens[0].next ).toBe( tokens[1] );
+            expect( tokens[1].prev ).toBe( tokens[0] );
+            expect( tokens[1].next ).toBe( tokens[2] );
+        });
+
+    });
+
 
 });
 

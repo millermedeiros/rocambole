@@ -34,57 +34,55 @@ Each Node have the following extra properties/methods:
 
   - parent : Node|undefined
   - update(newStringValue)
-  - source() : string
+  - toString() : string
   - next : Node|undefined
   - prev : Node|undefined
+  - depth : Number
   - getStartToken() : Token
   - getEndToken() : Token
   - getPrevToken() : Token|undefined
   - getNextToken() : Token|undefined
   - getTokens() : Array<Token>
 
+The AST root (Program) also have an extra property `nodes`, which contain all
+Nodes that are present inside the `Program.body`. The `nodes` array is *not*
+sorted on any specific way, order of elements is not guaranteed.
+
 
 
 ## Notes
 
-The recursive walk starts at the leaf nodes and go down the tree until it
-reaches the root node (`Program`). The tree will be divided into *branches*
-during the traversing, leaf nodes will be processed until they find a sibling
-branch that wasn't processed yet, lets supposed we have a program with
-following structure:
+The `moonwalk()` starts at the leaf nodes and go down the tree until it reaches
+the root node (`Program`).
 
 ```
- 1. Program [#24]
-  2. FunctionDeclaration [#23]
-   1. BlockStatement [#22]
-    1. IfStatement [#19 switch branch]
-     1. BynaryExpression [#18]
-      1. Identifier [#17]
-      2. Literal [#16]
-     2. BlockStatement [#15 switch branch]
-      1. IfStatement [#9 switch branch]
-       1. BynaryExpression [#8]
-        1. Identifier [#7]
-        2. Literal [#6]
-       2. BlockStatement [#5 switch branch]
-        1. ExpressionStatement [#4]
-         1. AssignmentExpression [#3]
-          1. Identifier [#2]
-          2. Literal [#1 walk start from here]
-      2. BlockStatement [#14]
-       1. ExpressionStatement [#13]
-        1. AssignmentExpression [#12]
-         1. Identifier [#11]
-         2. Literal [#10]
-  2. ReturnStatement [#21]
-   1. Identifier [#20]
+ Program [#18]
+ |-FunctionDeclaration [#16]
+ | |-BlockStatement [#14]
+ | | |-IfStatement [#12]
+ | | | |-BynaryExpression [#9]
+ | | | | |-Identifier [#4]
+ | | | | `-Literal [#5]
+ | | | `-BlockStatement [#10]
+ | | |   `-ExpressionStatement [#6]
+ | | |     `-AssignmentExpression [#3]
+ | | |       |-Identifier [#1 walk starts here]
+ | | |       `-Literal [#2]
+ | | `-VariableDeclaration [#13]
+ | |   `-VariableDeclarator [#11]
+ | |     |-Identifier [#7]
+ | |     `-Literal [#8]
+   `-ReturnStatement [#17]
+     `-Identifier [#15]
 ```
 
-The walk would start from deepest node and would follow the steps from 1-24
+The walk would start from deepest node and would follow the steps from 1-18
 until it reaches the root node. Each node will be traversed only once.
 
-The `getTokens()` method only retuns the orignal tokens, if you update the node
-content it won't reflect the actual values.
+The `getTokens()` method only retuns the orignal tokens, if you `update()` the
+node content it won't reflect the new tokens. Maybe this behavior will change
+in the future since it would be cool to be able to replace the tokens at will.
+
 
 
 ## API
@@ -96,10 +94,10 @@ var walker = require('es-ast-walker');
 // details since we can keep the original whiteSpace information
 var instrumentedAst = walker.parse(string);
 
-// walk() starts from the deepest node and walk the tree backwards
-var result = walker.walk(instrumentedAst, function(node){
+// moonwalk() starts from the deepest nodes and walk the tree backwards
+var result = walker.moonwalk(instrumentedAst, function(node){
     if (node.type == 'ArrayExpression'){
-        node.update( 'fn('+ node.source() +')' );
+        node.update( 'fn('+ node.toString() +')' );
     }
 });
 ```
