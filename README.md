@@ -18,59 +18,34 @@ introduce the new features and the differences on the concept behind the tool
 justifies a new project.
 
 
-## Extra AST Nodes
-
-Besides all the regular nodes present on the [Esprima
-AST](http://esprima.org/doc/index.html#ast) this tool also adds a couple more:
-They will be ordered according to the original `range`.
-
- * Comment
-  - Esprima keeps comments on a separate Array, we add it to the AST body since
-    in many cases the comment location is important.
-
 
 ## Extra Tokens
 
  * WhiteSpace
   - Can store multiple white spaces (tabs and line breaks are considered white
-    space).
+    space). Important if you want to do non-destructive replacements that are
+    white-space sensitive.
 
 
 
 ## Extra Properties
 
-Each node and token have the following extra properties/methods:
+Each Node have the following extra properties/methods:
 
- * inpired by falafel:
   - parent : Node|undefined
   - update(newStringValue)
   - source() : string
- * traversing:
-  - nextNode() : Node|undefined
-  - prevNode() : Node|undefined
-  - prevToken() : Token|undefined
-  - nextToken() : Token|undefined
- * manipulation:
-  - insertNodeBefore(node)
-  - insertNodeAfter(node)
-  - insertTokenAfter(token)
-  - insertTokenBefore(token)
-  - insertLineBreakBefore(nLines = 1, br = '\n')
-  - insertLineBreakAfter(nLines = 1, br = '\n')
-  - insertWhiteSpaceBefore(nSpaces = 1, spaceChar = ' ')
-  - insertWhiteSpaceAfter(nSpaces = 1, spaceChar = ' ')
+  - next : Node|undefined
+  - prev : Node|undefined
+  - getStartToken() : Token
+  - getEndToken() : Token
+  - getPrevToken() : Token|undefined
+  - getNextToken() : Token|undefined
+  - getTokens() : Array<Token>
 
-Nodes also have these extra methods:
-
- - startToken() : Token|undefined
- - endToken() : Token|undefined
 
 
 ## Notes
-
-Calling `update()` on each node will trigger a new parse of the node body by
-Esprima to make sure we get all tokens info and also line breaks that might be
-added by the `update()` call.
 
 The recursive walk starts at the leaf nodes and go down the tree until it
 reaches the root node (`Program`). The tree will be divided into *branches*
@@ -78,6 +53,7 @@ during the traversing, leaf nodes will be processed until they find a sibling
 branch that wasn't processed yet, lets supposed we have a program with
 following structure:
 
+```
  1. Program [#24]
   2. FunctionDeclaration [#23]
    1. BlockStatement [#22]
@@ -102,10 +78,13 @@ following structure:
          2. Literal [#10]
   2. ReturnStatement [#21]
    1. Identifier [#20]
+```
 
-The walk would start from deepest node which in this case is the node
-`2.1.1.2.1.2.1.1.2. Literal` and would follow the steps from 1-24 until it
-reaches the root node. Each node will be traversed only once.
+The walk would start from deepest node and would follow the steps from 1-24
+until it reaches the root node. Each node will be traversed only once.
+
+The `getTokens()` method only retuns the orignal tokens, if you update the node
+content it won't reflect the actual values.
 
 
 ## API
@@ -115,10 +94,10 @@ var walker = require('es-ast-walker');
 
 // you can pass a regular AST or a codeString, codeString will give more
 // details since we can keep the original whiteSpace information
-var ast = walker.instrument(ast | codeString);
+var instrumentedAst = walker.parse(string);
 
 // walk() starts from the deepest node and walk the tree backwards
-var result = walker.walk(instrumentedAst | ast | codeString, function(node){
+var result = walker.walk(instrumentedAst, function(node){
     if (node.type == 'ArrayExpression'){
         node.update( 'fn('+ node.source() +')' );
     }

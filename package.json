@@ -1,5 +1,5 @@
 {
-  "private" : true,
+  "private": true,
   "name": "es-ast-walker",
   "version": "0.0.0",
   "description": "Recursively walk and transform EcmaScript AST",
@@ -30,8 +30,8 @@
   "dependencies": {
     "esprima": "~1.0.2",
     "amd-utils": "~0.8.1"
-  }
-  "devDependencies" : {
+  },
+  "devDependencies": {
     "jasmine-node": "~1.0.26"
   }
 }
