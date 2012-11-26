@@ -5,7 +5,6 @@ var walker = require('../lib/walker');
 
 describe('parse', function () {
 
-
     it('should parse string and return AST', function () {
         var ast = walker.parse('(function(){ return 123 })');
         expect( ast.type ).toEqual( 'Program' );
@@ -62,7 +61,7 @@ describe('parse', function () {
             fnExpression, block, returnStatement;
 
         // this.beforeEach(function(){
-            ast = walker.parse('(function(){ return 123;})');
+            ast = walker.parse('(function(){\n  return 123; // foo\n})');
             program = ast;
             expressionStatement = ast.body[0];
             fnExpression = expressionStatement.expression;
@@ -75,34 +74,60 @@ describe('parse', function () {
                 expect( returnStatement.type ).toEqual( 'ReturnStatement' );
 
                 var tokens = returnStatement.getTokens();
+                expect( tokens[0].type ).toEqual( 'Keyword' );
                 expect( tokens[0].value ).toEqual( 'return' );
+
+                // console.log( tokens.map(function(t){ return [t.range, t.value] }) )
+
 
                 // space is also a token
                 expect( tokens[1].type ).toEqual( 'WhiteSpace' );
                 expect( tokens[1].value ).toEqual( ' ' );
 
+                expect( tokens[2].type ).toEqual( 'Numeric' );
                 expect( tokens[2].value ).toEqual( '123' );
 
                 // yes, the semicolon is a token inside the return statement
+                expect( tokens[3].type ).toEqual( 'Punctuator' );
                 expect( tokens[3].value ).toEqual( ';' );
 
                 expect( tokens.length ).toEqual( 4 );
             });
-        });
 
-        describe('node.getNextToken()', function () {
-            it('should return next token', function () {
-                var token = returnStatement.getNextToken();
-                expect( token.type ).toEqual( 'Punctuator' );
-                expect( token.value ).toEqual( '}' );
+            it('should include comments and line breaks', function () {
+                var tokens = block.getTokens();
+                expect( tokens[tokens.length - 3].type ).toEqual( 'LineComment' );
+                expect( tokens[tokens.length - 2].type ).toEqual( 'LineBreak' );
+                expect( tokens[tokens.length - 1].type ).toEqual( 'Punctuator' );
             });
         });
+
+        describe('node.getNextToken() / token.next', function () {
+            it('should return next token', function () {
+                var token = returnStatement.getNextToken();
+                expect( token.type ).toEqual( 'WhiteSpace' );
+                expect( token.value ).toEqual( ' ' );
+
+                // just so we make sure token.next works after
+                // node#getNextToken
+                var comment = token.next;
+                expect( comment.type ).toEqual( 'LineComment' );
+                expect( comment.value ).toEqual( ' foo' );
+                var br = comment.next;
+                expect( br.type ).toEqual( 'LineBreak' );
+                expect( br.value ).toEqual( '\n' );
+                var closing = br.next;
+                expect( closing.type ).toEqual( 'Punctuator' );
+                expect( closing.value ).toEqual( '}' );
+            });
+        });
+
 
         describe('node.getPrevToken()', function () {
             it('should return previous token', function () {
                 var token = returnStatement.getPrevToken();
                 expect( token.type ).toEqual( 'WhiteSpace' );
-                expect( token.value ).toEqual( ' ' );
+                expect( token.value ).toEqual( '  ' );
             });
         });
 
@@ -121,7 +146,6 @@ describe('parse', function () {
         });
 
     });
-
 
 
     describe('Node.next & Node.prev', function () {
@@ -148,6 +172,7 @@ describe('parse', function () {
         it('should instrument tokens', function () {
             var ast = walker.parse('function foo(){ return "bar"; }');
             var tokens = ast.tokens;
+
             expect( tokens[0].index ).toEqual( 0 );
             expect( tokens[1].index ).toEqual( 1 );
             expect( tokens[0].prev ).toBeUndefined();
@@ -157,7 +182,6 @@ describe('parse', function () {
         });
 
     });
-
 
 });
 
