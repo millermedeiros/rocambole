@@ -13,9 +13,12 @@ describe('parse', function () {
 
 
     it('should include tokens before and after "program" end', function () {
-        var ast = walker.parse('//foo\n(function(){ return 123 })\n//bar');
+        var ast = walker.parse('//foo\n(function(){ return 123 })\n//bar\n');
         expect( ast.startToken.value ).toEqual( 'foo' );
-        expect( ast.endToken.value ).toEqual( 'bar' );
+        expect( ast.endToken.value ).toEqual( '\n' );
+        ast = walker.parse('\n//foo\n(function(){ return 123 })\n//dolor');
+        expect( ast.startToken.value ).toEqual( '\n' );
+        expect( ast.endToken.value ).toEqual( 'dolor' );
     });
 
 
