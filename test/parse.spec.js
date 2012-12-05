@@ -106,6 +106,7 @@ describe('parse', function () {
                 expect( tokens[tokens.length - 2].type ).toEqual( 'LineBreak' );
                 expect( tokens[tokens.length - 1].type ).toEqual( 'Punctuator' );
             });
+
         });
 
         describe('node.nextToken / token.next', function () {
