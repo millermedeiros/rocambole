@@ -109,34 +109,6 @@ describe('parse', function () {
 
         });
 
-        describe('node.nextToken / token.next', function () {
-            it('should return next token', function () {
-                var token = returnStatement.nextToken;
-                expect( token.type ).toEqual( 'WhiteSpace' );
-                expect( token.value ).toEqual( ' ' );
-
-                // just so we make sure token.next works after
-                // node#nextToken
-                var comment = token.next;
-                expect( comment.type ).toEqual( 'LineComment' );
-                expect( comment.value ).toEqual( ' foo' );
-                var br = comment.next;
-                expect( br.type ).toEqual( 'LineBreak' );
-                expect( br.value ).toEqual( '\n' );
-                var closing = br.next;
-                expect( closing.type ).toEqual( 'Punctuator' );
-                expect( closing.value ).toEqual( '}' );
-            });
-        });
-
-
-        describe('node.prevToken', function () {
-            it('should return previous token', function () {
-                var token = returnStatement.prevToken;
-                expect( token.type ).toEqual( 'WhiteSpace' );
-                expect( token.value ).toEqual( '  ' );
-            });
-        });
 
         describe('node.endToken', function () {
             it('should return last token inside node', function () {

@@ -41,8 +41,6 @@ Each Node have the following extra properties/methods:
   - depth : Number
   - startToken : Token
   - endToken : Token
-  - prevToken : Token|undefined
-  - nextToken : Token|undefined
   - getTokens() : Array<Token>
 
 Each token also have:
