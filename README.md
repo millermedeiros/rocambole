@@ -49,6 +49,9 @@ Each token also have:
 
  - prev : Token|undefined
  - next : Token|undefined
+ - before(newToken)
+ - after(newToken)
+ - remove()
 
 
 The AST root (Program) also have an extra property `nodes`, which contain all

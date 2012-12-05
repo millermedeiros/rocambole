@@ -12,7 +12,14 @@ describe('parse', function () {
     });
 
 
-    describe('falafel-like methods/properties', function () {
+    it('should include tokens before and after "program" end', function () {
+        var ast = walker.parse('//foo\n(function(){ return 123 })\n//bar');
+        expect( ast.startToken.value ).toEqual( 'foo' );
+        expect( ast.endToken.value ).toEqual( 'bar' );
+    });
+
+
+    describe('node basic methods/properties', function () {
 
         var ast, program, expressionStatement,
             fnExpression, block, returnStatement;
