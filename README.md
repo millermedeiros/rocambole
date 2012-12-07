@@ -1,6 +1,8 @@
-# Rocambole : Recursively walk and transform EcmaScript AST
+# Rocambole [![Build Status](https://secure.travis-ci.org/millermedeiros/rocambole.png?branch=master)](https://travis-ci.org/millermedeiros/rocambole)
 
-Add extra information/helpers to [Esprima / Mozilla SpiderMonkey Parser
+
+Recursively walk and transform EcmaScript AST and add extra information/helpers
+to [Esprima / Mozilla SpiderMonkey Parser
 API](http://esprima.org/doc/index.html#ast) compatible AST and provides
 different methods for walking the tree recursively.
 
