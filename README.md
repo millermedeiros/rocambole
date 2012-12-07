@@ -1,5 +1,6 @@
 # Rocambole [![Build Status](https://secure.travis-ci.org/millermedeiros/rocambole.png?branch=master)](https://travis-ci.org/millermedeiros/rocambole)
 
+![rocambole](https://raw.github.com/millermedeiros/rocambole/master/rocambole.jpg)
 
 Recursively walk and transform EcmaScript AST and add extra information/helpers
 to [Esprima / Mozilla SpiderMonkey Parser
