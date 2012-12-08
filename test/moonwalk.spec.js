@@ -1,6 +1,5 @@
 
 var expect = require('expect.js');
-
 var walker = require('../lib/walker');
 
 

@@ -2,10 +2,8 @@
 
 ![rocambole](https://raw.github.com/millermedeiros/rocambole/master/rocambole.jpg)
 
-Recursively walk and transform EcmaScript AST and add extra information/helpers
-to [Esprima / Mozilla SpiderMonkey Parser
-API](http://esprima.org/doc/index.html#ast) compatible AST and provides
-different methods for walking the tree recursively.
+Recursively walk and add extra information/helpers to [Esprima / Mozilla
+SpiderMonkey Parser API](http://esprima.org/doc/index.html#ast) compatible AST.
 
 The main difference between other tools is that it also keeps information about
 tokens and white spaces and it is meant to be used to transform the tokens and
@@ -20,10 +18,10 @@ This module was heavily inspired by
 [node-falafel](https://github.com/substack/node-falafel) and
 [node-burrito](https://github.com/substack/node-burrito) but I needed more
 information than what is currently available on falafel (specially about
-tokens, empty lines and white spaces).
-
-The amount of changes required to introduce the new features and the
-differences on the concept behind the tool justified a new project.
+tokens, empty lines and white spaces) and also needed to do the node traversing
+on the opposite order (start from leaf nodes). The amount of changes required
+to introduce the new features and the differences on the concept behind the
+tool justified a new project.
 
 It was created mainly to be used on
 [esformatter](https://github.com/millermedeiros/esformatter/).
@@ -33,16 +31,16 @@ It was created mainly to be used on
 ## Extra Tokens
 
 Besides all the regular tokens returned by `esprima` we also add a few more
-that are important for non-destructive transformations.
+that are important for non-destructive transformations:
 
- * WhiteSpace
+ * `WhiteSpace`
    - Can store multiple white spaces (tabs are considered white space, line
      breaks not). Important if you want to do non-destructive replacements that
      are white-space sensitive.
    - Multiple subsequent white spaces are treated as a single token.
- * LineBreak
- * LineComment
- * BlockComment
+ * `LineBreak`
+ * `LineComment`
+ * `BlockComment`
 
 
 
@@ -50,36 +48,24 @@ that are important for non-destructive transformations.
 
 Each Node have the following extra properties/methods:
 
-  - parent : Node|undefined
-  - toString() : string
-  - next : Node|undefined
-  - prev : Node|undefined
-  - depth : Number
-  - startToken : Token
-  - endToken : Token
-  - getTokens() : Array<Token>
+  - `parent` : Node|undefined
+  - `toString()` : string
+  - `next` : Node|undefined
+  - `prev` : Node|undefined
+  - `depth` : Number
+  - `startToken` : Token
+  - `endToken` : Token
 
 Each token also have:
 
- - prev : Token|undefined
- - next : Token|undefined
- - before(newToken)
-  - insert a new token before
- - after(newToken)
-  - insert a new token after
- - remove()
-  - remove token from the tree
+ - `prev` : Token|undefined
+ - `next` : Token|undefined
 
-PS: all manipulation methods update `range` and `loc` of all tokens till the
-end of the list.
-
-The AST root (Program) also have an extra property `nodes`, which contain all
-Nodes that are present inside the `Program.body`. The `nodes` array is *not*
-sorted on any specific way, order of elements is not guaranteed. It is used
-internally by the `moonwalk`.
-
-You should threat the tokens as a linked list, so to loop between all tokens
-inside a node you can do like this:
+You should **treat the tokens as a linked list instead of reading the
+`ast.tokens` array** (inserting/removing items from a linked list is very cheap
+and won't break the loop). You should grab a reference to the `node.startToken`
+and get `token.next` until you find the desired token or reach the end of the
+program. To loop between all tokens inside a node you can do like this:
 
 ```js
 var token = node.startToken;
@@ -91,28 +77,54 @@ while (token !== node.endToken.next) {
 
 
 
-## Notes
+## API
+
+
+### rocambole.parse
+
+Parses a string and instrument the AST with extra properties/methods.
+
+```js
+var rocambole = require('rocambole');
+var ast = rocambole.parse(string);
+console.log( ast.startToken );
+// to get a string representation of all tokens call toString()
+console.log( ast.toString() );
+```
+
+
+### rocambole.moonwalk
 
 The `moonwalk()` starts at the leaf nodes and go down the tree until it reaches
 the root node (`Program`). Each node will be traversed only once.
 
+```js
+rocambole.moonwalk(ast, function(node){
+    if (node.type == 'ArrayExpression'){
+        console.log( node.depth +': '+ node.toString() );
+    }
+});
+```
+
+Traverse order:
+
 ```
  Program [#18]
- |-FunctionDeclaration [#16]
- | |-BlockStatement [#14]
- | | |-IfStatement [#12]
- | | | |-BynaryExpression [#9]
- | | | | |-Identifier [#4]
- | | | | `-Literal [#5]
- | | | `-BlockStatement [#10]
- | | |   `-ExpressionStatement [#6]
- | | |     `-AssignmentExpression [#3]
- | | |       |-Identifier [#1 walk starts here]
- | | |       `-Literal [#2]
- | | `-VariableDeclaration [#13]
- | |   `-VariableDeclarator [#11]
- | |     |-Identifier [#7]
- | |     `-Literal [#8]
+ `-FunctionDeclaration [#16]
+   |-BlockStatement [#14]
+   | |-IfStatement [#12]
+   | | |-BynaryExpression [#9]
+   | | | |-Identifier [#4]
+   | | | `-Literal [#5]
+   | | `-BlockStatement [#10]
+   | |   `-ExpressionStatement [#6]
+   | |     `-AssignmentExpression [#3]
+   | |       |-Identifier [#1 walk starts here]
+   | |       `-Literal [#2]
+   | `-VariableDeclaration [#13]
+   |   `-VariableDeclarator [#11]
+   |     |-Identifier [#7]
+   |     `-Literal [#8]
    `-ReturnStatement [#17]
      `-Identifier [#15]
 ```
@@ -120,45 +132,22 @@ the root node (`Program`). Each node will be traversed only once.
 This behavior is very different from node-falafel and node-burrito.
 
 
+### rocambole.recursive
 
-## API
+It loops through all nodes on the AST starting from the root node (`Program`),
+similar to `node-falafel`.
 
 ```js
-var rocambole = require('rocambole');
-
-// it parses a string and instrument the AST with extra properties/methods
-var instrumentedAst = rocambole.parse(string);
-
-// moonwalk() starts from the deepest nodes and walk the tree backwards
-rocambole.moonwalk(instrumentedAst, function(node){
-    if (node.type == 'ArrayExpression'){
-        console.log( node.toString() );
-    }
-});
-
-// you also have the option to do a recursive walk (similar to node-falafel)
-rocambole.recursive(instrumentedAst, function(node){
+rocambole.recursive(ast, function(node){
     console.log(node.type);
 });
-
-// call toString() to get a string representation of all tokens
-var result = instrumentedAst.toString();
 ```
-
 
 
 ## Popular Alternatives
 
  - [burrito](https://github.com/substack/node-burrito)
  - [falafel](https://github.com/substack/node-falafel)
-
-
-
-
-## TODO
-
- - add a method similar to falafel `node.update(str)` but that actually
-   converts the string into tokens before inserting.
 
 
 
@@ -186,6 +175,15 @@ MIT
 
 
 ## Changelog
+
+### Next
+
+ - Deprecated:
+   - `token.before()`
+   - `token.after()`
+   - `token.remove()`
+   - `node.getTokens()`
+   - `ast.nodes`
 
 ### v0.1.1 (2012/12/08)
 
