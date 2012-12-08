@@ -25,6 +25,9 @@ tokens, empty lines and white spaces).
 The amount of changes required to introduce the new features and the
 differences on the concept behind the tool justified a new project.
 
+It was created mainly to be used on
+[esformatter](https://github.com/millermedeiros/esformatter/).
+
 
 
 ## Extra Tokens
@@ -180,4 +183,15 @@ each `npm test --coverage` call.
 
 MIT
 
+
+
+## Changelog
+
+### v0.1.1 (2012/12/08)
+
+ - Improve token manipulation methods behavior (`before`, `after`, `remove`)
+
+### v0.1.0 (2012/12/06)
+
+ - Initial release
 
