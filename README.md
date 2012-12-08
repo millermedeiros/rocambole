@@ -159,6 +159,23 @@ var result = instrumentedAst.toString();
 
 
 
+## Unit Tests
+
+Besides the regular unit tests we also use
+[istanbul](https://github.com/yahoo/istanbul) to generate code coverage
+reports, tests should have at least 95% code coverage for statements, branches
+and lines and 100% code coverage for functions or travis build will fail.
+
+We do not run the coverage test at each call since it slows down the
+performnace of the tests and it also makes it harder to see the test results.
+To execute tests and generate coverage report call `npm test --coverage`, for
+regular tests just do `npm test`.
+
+Coverage reports are not committed to the repository since they will change at
+each `npm test --coverage` call.
+
+
+
 ## License
 
 MIT

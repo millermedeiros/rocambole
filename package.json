@@ -1,13 +1,13 @@
 {
   "name": "rocambole",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Recursively walk and transform EcmaScript AST",
   "main": "lib/walker.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "node ./node_modules/.bin/jasmine-node test"
+    "test": "node ./node_modules/.bin/istanbul test test/runner.js"
   },
   "repository": {
     "type": "git",
@@ -34,6 +34,8 @@
     "amd-utils": "~0.8.1"
   },
   "devDependencies": {
-    "jasmine-node": "~1.0.26"
+    "mocha": "1.7",
+    "expect.js": "0.2",
+    "istanbul": "~0.1.23"
   }
 }
