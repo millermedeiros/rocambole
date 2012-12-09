@@ -176,7 +176,7 @@ MIT
 
 ## Changelog
 
-### Next
+### v0.2.0 (2012/12/09)
 
  - Deprecated:
    - `token.before()`
@@ -184,6 +184,9 @@ MIT
    - `token.remove()`
    - `node.getTokens()`
    - `ast.nodes`
+ - avoid recursion over comments.
+ - fix weird bug on esformatter introduced on v0.1.1 related to `token._ast`
+   property.
 
 ### v0.1.1 (2012/12/08)
 
