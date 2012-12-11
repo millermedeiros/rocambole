@@ -2,6 +2,6 @@
  node_js:
    - "0.8"
  script:
-   - "npm test --coverage"
+   - "npm test --coverage --reporter dot"
    - "node ./node_modules/.bin/istanbul check-coverage --statements 95 --branches 95 --lines 95 --functions 100"
 
