@@ -23,28 +23,81 @@ describe('parse', function () {
 
 
     it('should work with any kind of line breaks & spaces', function () {
-        var ast = walker.parse('\rvar n\r\n=\n10;\r\r  \t\t  \r');
+        var ast = walker.parse('\nvar n\r\n=\n10;\r\r  \t\t  \n');
 
         var br_1 = ast.startToken;
         expect( br_1.type ).to.be( 'LineBreak' );
-        expect( br_1.value ).to.be( '\r' );
+        expect( br_1.value ).to.be( '\n' );
+        expect( br_1.range ).to.eql( [0, 1] );
+        expect( br_1.loc ).to.eql({
+            start : {
+                line : 1,
+                column : 0
+            },
+            end : {
+                line : 1,
+                column : 1
+            }
+        });
+
+        var ws_1 = ast.startToken.next.next;
+        expect( ws_1.type ).to.be( 'WhiteSpace' );
+        expect( ws_1.value ).to.be( ' ' );
+
         var br_2 = br_1.next.next.next.next;
         expect( br_2.type ).to.be( 'LineBreak' );
         expect( br_2.value ).to.be( '\r\n' );
-        var br_3 = ast.endToken;
-        expect( br_3.type ).to.be( 'LineBreak' );
-        expect( br_3.value ).to.be( '\r' );
+        expect( br_2.range ).to.eql( [6, 8] );
+        expect( br_2.loc ).to.eql({
+            start : {
+                line : 2,
+                column : 5
+            },
+            end : {
+                line : 2,
+                column : 7
+            }
+        });
 
-        var ws_1 = ast.endToken.prev;
-        expect( ws_1.type ).to.be( 'WhiteSpace' );
-        expect( ws_1.value ).to.be( '  \t\t  ' );
+        // it's important to notice that esprima doesn't parse "\r" as line
+        // break, so if it is not at EOF it will give conflicting "loc" info.
+        var br_6 = ast.endToken;
+        expect( br_6.type ).to.be( 'LineBreak' );
+        expect( br_6.value ).to.be( '\n' );
+        expect( br_6.range ).to.eql( [21, 22] );
+        expect( br_6.loc ).to.eql({
+            start : {
+                line : 6,
+                column : 6
+            },
+            end : {
+                line : 6,
+                column : 7
+            }
+        });
 
-        var br_4 = ws_1.prev;
-        expect( br_4.type ).to.be( 'LineBreak' );
-        expect( br_4.value ).to.be( '\r' );
-        var br_5 = br_4.prev;
+        var ws_2 = ast.endToken.prev;
+        expect( ws_2.type ).to.be( 'WhiteSpace' );
+        expect( ws_2.value ).to.be( '  \t\t  ' );
+        expect( ws_2.range ).to.eql( [15, 21] );
+        expect( ws_2.loc ).to.eql({
+            start : {
+                line : 6,
+                column : 0
+            },
+            end : {
+                line : 6,
+                column : 6
+            }
+        });
+
+        var br_5 = ws_2.prev;
         expect( br_5.type ).to.be( 'LineBreak' );
         expect( br_5.value ).to.be( '\r' );
+
+        var br_4 = br_5.prev;
+        expect( br_4.type ).to.be( 'LineBreak' );
+        expect( br_4.value ).to.be( '\r' );
     });
 
 
