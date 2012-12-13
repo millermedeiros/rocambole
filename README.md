@@ -75,6 +75,33 @@ while (token !== node.endToken.next) {
 }
 ```
 
+The method `toString` loops through all tokens between `node.startToken` and
+`node.endToken` grabbing the `token.raw` (used by comments) or `token.value`
+properties. To implement a method similar to falafel `update()` you can do
+this:
+
+```js
+function update(node, str){
+    var newToken = {
+        type : 'Custom', // can be anything (not used internally)
+        value : str
+    };
+    // update linked list references
+    if ( node.startToken.prev ) {
+        node.startToken.prev.next = newToken;
+    }
+    if ( node.endToken.next ) {
+        node.endToken.next.prev = newToken;
+    }
+    node.startToken = node.endToken = newToken;
+}
+```
+
+I plan to add some helper methods and/or create a separate project
+(rocambole-utils). For now I'm adding the helpers on the [esformatter util
+package](https://github.com/millermedeiros/esformatter/tree/master/lib/util)
+but I plan to extract the generic ones.
+
 
 
 ## API
