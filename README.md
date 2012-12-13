@@ -176,6 +176,10 @@ MIT
 
 ## Changelog
 
+### v0.2.1 (2012/12/13)
+
+ - fix `loc` info on `WhiteSpace` and `LineBreak` tokens. (#2)
+
 ### v0.2.0 (2012/12/09)
 
  - Deprecated:
