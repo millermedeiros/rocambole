@@ -1,6 +1,6 @@
 {
   "name": "rocambole",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Recursively walk and transform EcmaScript AST",
   "main": "lib/walker.js",
   "directories": {
@@ -13,8 +13,8 @@
     "type": "git",
     "url": "https://github.com/millermedeiros/rocambole.git"
   },
-  "bugs" : {
-    "url" : "https://github.com/millermedeiros/rocambole/issues"
+  "bugs": {
+    "url": "https://github.com/millermedeiros/rocambole/issues"
   },
   "keywords": [
     "ast",
