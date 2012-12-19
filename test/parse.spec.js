@@ -1,3 +1,5 @@
+/*global describe:false, it:false */
+"use strict";
 
 var expect = require('expect.js');
 var walker = require('../lib/walker');
@@ -100,6 +102,27 @@ describe('parse', function () {
         expect( br_4.value ).to.be( '\r' );
     });
 
+
+    it('should not include any char that isn\'t a white space on a WhiteSpace token [issue #3]', function () {
+        var ast = walker.parse("\n/* foo */\n/* bar */\nfunction foo(){\n  var bar = 'baz';\n\n  //foo\n  //bar\n\n  var lorem = 'ipsum';\n  return bar + lorem;\n}");
+        var tk = ast.startToken;
+        var nComments = 0;
+        while (tk) {
+            if (tk.type === 'WhiteSpace') {
+                expect( tk.value ).to.match( /^[\s\t]+$/ );
+            } else if (tk.type === 'LineBreak') {
+                expect( tk.value ).to.equal( '\n' );
+            } else if (tk.type === 'LineComment') {
+                expect( tk.raw ).to.match( /^\/\/\w{3}$/ );
+                nComments++;
+            } else if (tk.type === 'BlockComment') {
+                expect( tk.raw ).to.match( /^\/\* \w{3} \*\/$/ );
+                nComments++;
+            }
+            tk = tk.next;
+        }
+        expect( nComments ).to.be( 4 );
+    });
 
     describe('Node', function () {
 
