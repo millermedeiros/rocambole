@@ -1,4 +1,4 @@
-/*global describe:false, it:false */
+/*global describe:false, it:false, beforeEach:false */
 "use strict";
 
 var expect = require('expect.js');
@@ -25,7 +25,7 @@ describe('parse', function () {
 
 
     it('should work with any kind of line breaks & spaces', function () {
-        var ast = walker.parse('\nvar n\r\n=\n10;\r\r  \t\t  \n');
+        var ast = walker.parse('\nvar n\r\n=\n10;\r\r  \t\t  \n', {loc : true});
 
         var br_1 = ast.startToken;
         expect( br_1.type ).to.be( 'LineBreak' );
@@ -124,15 +124,36 @@ describe('parse', function () {
         expect( nComments ).to.be( 4 );
     });
 
+
+    it('should instrument object expression "value" node', function () {
+        // this was a bug introduced while trying to improve performance
+        var ast = walker.parse('amet(123, a, {flag : true});');
+        var exp = ast.body[0].expression;
+        expect( exp.startToken ).not.to.be(undefined);
+        expect( exp.callee.startToken ).not.to.be(undefined);
+        expect( exp['arguments'][0].startToken ).not.to.be(undefined);
+        expect( exp['arguments'][1].startToken ).not.to.be(undefined);
+        expect( exp['arguments'][2].startToken ).not.to.be(undefined);
+        expect( exp['arguments'][2].properties[0].startToken ).not.to.be(undefined);
+        expect( exp['arguments'][2].properties[0].key.startToken ).not.to.be(undefined);
+        expect( exp['arguments'][2].properties[0].value.startToken ).not.to.be(undefined);
+    });
+
+
+
     describe('Node', function () {
 
-        var ast = walker.parse('/* block */\n(function(){\n return 123; // line\n})');
-        var program = ast;
-        var expressionStatement = ast.body[0];
-        var fnExpression = expressionStatement.expression;
-        var block = fnExpression.body;
-        var returnStatement = block.body[0];
+        var ast, program, expressionStatement,
+            fnExpression, block, returnStatement;
 
+        beforeEach(function(){
+            ast                 = walker.parse('/* block */\n(function(){\n return 123; // line\n})');
+            program             = ast;
+            expressionStatement = ast.body[0];
+            fnExpression        = expressionStatement.expression;
+            block               = fnExpression.body;
+            returnStatement     = block.body[0];
+        });
 
         describe('node.parent', function () {
             it('should add reference to parent node', function () {
@@ -171,16 +192,31 @@ describe('parse', function () {
 
         describe('node.endToken', function () {
             it('should return last token inside node', function () {
-                var token = returnStatement.endToken;
-                expect( token.value ).to.equal( ';' );
+                expect( program.endToken.value ).to.equal( ')' );
+                expect( expressionStatement.endToken.value ).to.equal( ')' );
+                expect( fnExpression.endToken.value ).to.equal( '}' );
+                expect( block.endToken.value ).to.equal( '}' );
+                expect( returnStatement.endToken.value ).to.equal( ';' );
+            });
+
+            it('should capture end token properly', function () {
+                var ast = walker.parse('[1,2,[3,4,[5,6,[7,8,9]]]];');
+                var exp = ast.body[0].expression;
+                expect( exp.endToken.value ).to.equal( ']' );
+                expect( exp.elements[0].value ).to.equal( 1 );
+                expect( exp.elements[0].startToken.value ).to.equal( '1' );
+                expect( exp.elements[0].endToken.value ).to.equal( '1' );
             });
         });
 
 
         describe('node.startToken', function () {
-            it('should return last token inside node', function () {
-                var token = returnStatement.startToken;
-                expect( token.value ).to.equal( 'return' );
+            it('should return first token inside node', function () {
+                expect( program.startToken.value ).to.equal( ' block ' );
+                expect( expressionStatement.startToken.value ).to.equal( '(' );
+                expect( fnExpression.startToken.value ).to.equal( 'function' );
+                expect( block.startToken.value ).to.equal( '{' );
+                expect( returnStatement.startToken.value ).to.equal( 'return' );
             });
         });
 
@@ -204,7 +240,6 @@ describe('parse', function () {
     });
 
 
-
     describe('Token', function () {
 
         it('should instrument tokens', function () {
@@ -218,7 +253,7 @@ describe('parse', function () {
         });
 
         it('should add range and loc info to comment tokens', function () {
-            var ast = walker.parse('\n/* foo\n  bar\n*/\nfunction foo(){ return "bar"; }\n// end');
+            var ast = walker.parse('\n/* foo\n  bar\n*/\nfunction foo(){ return "bar"; }\n// end', {loc:true});
             var blockComment = ast.startToken.next;
             expect( blockComment.range ).to.eql( [1, 16] );
             expect( blockComment.loc ).to.eql({

@@ -24,6 +24,7 @@ if (process.env.npm_config_invert) {
 
 m.addFile('test/parse.spec.js');
 m.addFile('test/moonwalk.spec.js');
+m.addFile('test/perf.spec.js');
 
 m.run(function(err){
     var exitCode = err? 1 : 0;
