@@ -1,6 +1,6 @@
 {
   "name": "rocambole",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Recursively walk and transform EcmaScript AST",
   "main": "lib/walker.js",
   "directories": {

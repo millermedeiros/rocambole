@@ -203,6 +203,15 @@ MIT
 
 ## Changelog
 
+### v0.2.3 (2013/01/08)
+
+ - improve `rocambole.parse()` performance by 4500%. (#4)
+ - improve `rocambole.moonwalk()` performance by 11000%.
+
+### v0.2.2 (2012/12/19)
+
+ - fix consecutive comments before start of program. (#3)
+
 ### v0.2.1 (2012/12/13)
 
  - fix `loc` info on `WhiteSpace` and `LineBreak` tokens. (#2)
