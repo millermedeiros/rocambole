@@ -42,6 +42,13 @@ that are important for non-destructive transformations:
  * `LineComment`
  * `BlockComment`
 
+It's way easier to rebuild the JS string if the tokens already have line breaks
+and comments. It's also easier to identify if previous/next/current token is a
+LineBreak or Comment (sometimes needed for non-destructive transformations).
+
+Rocambole structure might change in the future to keep the extraneous tokens
+outside the `tokens` array and also add an option to toggle the behavior.
+([issue #7](https://github.com/millermedeiros/rocambole/issues/7))
 
 
 ## Extra Properties
@@ -60,6 +67,9 @@ Each token also have:
 
  - `prev` : Token|undefined
  - `next` : Token|undefined
+
+To get a better idea of the generated AST structure try out
+[rocambole-visualize](http://piuccio.github.io/rocambole-visualize/).
 
 You should **treat the tokens as a linked list instead of reading the
 `ast.tokens` array** (inserting/removing items from a linked list is very cheap
