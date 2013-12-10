@@ -71,6 +71,9 @@ Each token also have:
 To get a better idea of the generated AST structure try out
 [rocambole-visualize](http://piuccio.github.io/rocambole-visualize/).
 
+
+## Linked List
+
 You should **treat the tokens as a linked list instead of reading the
 `ast.tokens` array** (inserting/removing items from a linked list is very cheap
 and won't break the loop). You should grab a reference to the `node.startToken`
@@ -109,10 +112,15 @@ function update(node, str){
 }
 ```
 
-I plan to add some helper methods and/or create a separate project
-(rocambole-utils). For now I'm adding the helpers on the [esformatter util
+
+## Helpers
+
+I plan to create helpers as separate projects. For now I'm adding the helpers
+on the [esformatter util
 package](https://github.com/millermedeiros/esformatter/tree/master/lib/util)
 but I plan to extract the generic ones.
+
+ - [rocambole-token](https://github.com/millermedeiros/rocambole-token): helpers for token manipulation
 
 
 
