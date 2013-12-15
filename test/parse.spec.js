@@ -290,6 +290,11 @@ describe('parse', function () {
             expect( ast.endToken.originalIndent ).to.be(undefined);
         });
 
+        it('should not add as originalIndent if prev token is not white space', function () {
+            var ast = rocambole.parse('lorem;/* foo */\n\t\t// bar');
+            expect( ast.startToken.next.next.originalIndent ).to.be(undefined);
+        });
+
     });
 
 
