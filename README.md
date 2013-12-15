@@ -227,6 +227,10 @@ MIT
 
 ## Changelog
 
+### v0.3.0 (2013/12/15)
+
+ - add `originalIndent` to `BlockComment` (#11)
+
 ### v0.2.3 (2013/01/08)
 
  - improve `rocambole.parse()` performance by 4500%. (#4)
