@@ -227,6 +227,10 @@ MIT
 
 ## Changelog
 
+### v0.3.1 (2013/12/15)
+
+ - fix `originalIndent` on `BlockComment` when prev token is not `WhiteSpace`.
+
 ### v0.3.0 (2013/12/15)
 
  - add `originalIndent` to `BlockComment` (#11)
