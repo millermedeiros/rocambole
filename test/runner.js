@@ -7,8 +7,8 @@ var Mocha = require('mocha');
 
 var opts = {
     ui : 'bdd',
-    reporter : (process.env.npm_config_reporter || 'spec'),
-    grep : process.env.npm_config_grep
+    reporter : (process.env.REPORTER || 'spec'),
+    grep : process.env.GREP
 };
 
 // we use the dot reporter on travis since it works better
@@ -18,7 +18,7 @@ if (process.env.TRAVIS) {
 
 var m = new Mocha(opts);
 
-if (process.env.npm_config_invert) {
+if (process.env.INVERT) {
     m.invert();
 }
 

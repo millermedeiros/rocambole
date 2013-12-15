@@ -2,12 +2,12 @@
   "name": "rocambole",
   "version": "0.2.3",
   "description": "Recursively walk and transform EcmaScript AST",
-  "main": "lib/walker.js",
+  "main": "rocambole.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "node ./node_modules/.bin/istanbul test test/runner.js"
+    "test": "istanbul test test/runner.js"
   },
   "repository": {
     "type": "git",

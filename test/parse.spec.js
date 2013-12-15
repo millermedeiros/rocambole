@@ -2,30 +2,30 @@
 "use strict";
 
 var expect = require('expect.js');
-var walker = require('../lib/walker');
+var rocambole = require('../');
 
 
 describe('parse', function () {
 
     it('should parse string and return AST', function () {
-        var ast = walker.parse('(function(){ return 123 })');
+        var ast = rocambole.parse('(function(){ return 123 })');
         expect( ast.type ).to.equal( 'Program' );
         expect( ast.body[0].type ).to.equal( 'ExpressionStatement' );
     });
 
 
     it('should include tokens before and after "program" end', function () {
-        var ast = walker.parse('//foo\n(function(){ return 123 })\n//bar\n');
+        var ast = rocambole.parse('//foo\n(function(){ return 123 })\n//bar\n');
         expect( ast.startToken.value ).to.equal( 'foo' );
         expect( ast.endToken.value ).to.equal( '\n' );
-        ast = walker.parse('\n//foo\n(function(){ return 123 })\n//dolor');
+        ast = rocambole.parse('\n//foo\n(function(){ return 123 })\n//dolor');
         expect( ast.startToken.value ).to.equal( '\n' );
         expect( ast.endToken.value ).to.equal( 'dolor' );
     });
 
 
     it('should work with any kind of line breaks & spaces', function () {
-        var ast = walker.parse('\nvar n\r\n=\n10;\r\r  \t\t  \n', {loc : true});
+        var ast = rocambole.parse('\nvar n\r\n=\n10;\r\r  \t\t  \n', {loc : true});
 
         var br_1 = ast.startToken;
         expect( br_1.type ).to.be( 'LineBreak' );
@@ -104,7 +104,7 @@ describe('parse', function () {
 
 
     it('should not include any char that isn\'t a white space on a WhiteSpace token [issue #3]', function () {
-        var ast = walker.parse("\n/* foo */\n/* bar */\nfunction foo(){\n  var bar = 'baz';\n\n  //foo\n  //bar\n\n  var lorem = 'ipsum';\n  return bar + lorem;\n}");
+        var ast = rocambole.parse("\n/* foo */\n/* bar */\nfunction foo(){\n  var bar = 'baz';\n\n  //foo\n  //bar\n\n  var lorem = 'ipsum';\n  return bar + lorem;\n}");
         var tk = ast.startToken;
         var nComments = 0;
         while (tk) {
@@ -127,7 +127,7 @@ describe('parse', function () {
 
     it('should instrument object expression "value" node', function () {
         // this was a bug introduced while trying to improve performance
-        var ast = walker.parse('amet(123, a, {flag : true});');
+        var ast = rocambole.parse('amet(123, a, {flag : true});');
         var exp = ast.body[0].expression;
         expect( exp.startToken ).not.to.be(undefined);
         expect( exp.callee.startToken ).not.to.be(undefined);
@@ -147,7 +147,7 @@ describe('parse', function () {
             fnExpression, block, returnStatement;
 
         beforeEach(function(){
-            ast                 = walker.parse('/* block */\n(function(){\n return 123; // line\n})');
+            ast                 = rocambole.parse('/* block */\n(function(){\n return 123; // line\n})');
             program             = ast;
             expressionStatement = ast.body[0];
             fnExpression        = expressionStatement.expression;
@@ -200,7 +200,7 @@ describe('parse', function () {
             });
 
             it('should capture end token properly', function () {
-                var ast = walker.parse('[1,2,[3,4,[5,6,[7,8,9]]]];');
+                var ast = rocambole.parse('[1,2,[3,4,[5,6,[7,8,9]]]];');
                 var exp = ast.body[0].expression;
                 expect( exp.endToken.value ).to.equal( ']' );
                 expect( exp.elements[0].value ).to.equal( 1 );
@@ -223,7 +223,7 @@ describe('parse', function () {
 
         describe('Node.next & Node.prev', function () {
             it('should return reference to previous and next nodes', function () {
-                var ast = walker.parse("\n/* foo */\n/* bar */\nfunction foo(){\n  var bar = 'baz';\n  var lorem = 'ipsum';\n  return bar + lorem;\n}");
+                var ast = rocambole.parse("\n/* foo */\n/* bar */\nfunction foo(){\n  var bar = 'baz';\n  var lorem = 'ipsum';\n  return bar + lorem;\n}");
                 var block = ast.body[0].body.body;
                 var firstNode = block[0];
                 var secondNode = block[1];
@@ -243,7 +243,7 @@ describe('parse', function () {
     describe('Token', function () {
 
         it('should instrument tokens', function () {
-            var ast = walker.parse('function foo(){ return "bar"; }');
+            var ast = rocambole.parse('function foo(){ return "bar"; }');
             var tokens = ast.tokens;
 
             expect( tokens[0].prev ).to.be(undefined);
@@ -253,7 +253,7 @@ describe('parse', function () {
         });
 
         it('should add range and loc info to comment tokens', function () {
-            var ast = walker.parse('\n/* foo\n  bar\n*/\nfunction foo(){ return "bar"; }\n// end', {loc:true});
+            var ast = rocambole.parse('\n/* foo\n  bar\n*/\nfunction foo(){ return "bar"; }\n// end', {loc:true});
             var blockComment = ast.startToken.next;
             expect( blockComment.range ).to.eql( [1, 16] );
             expect( blockComment.loc ).to.eql({

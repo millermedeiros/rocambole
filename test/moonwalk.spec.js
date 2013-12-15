@@ -1,13 +1,17 @@
+/* globals describe:false, it:false */
+/* jshint node:true */
+"use strict";
+
 
 var expect = require('expect.js');
-var walker = require('../lib/walker');
+var rocambole = require('../');
 
 
 describe('moonwalk()', function () {
 
     it('should generate AST if first arg is a string', function () {
         var count = 0;
-        var ast = walker.moonwalk("function fn(x){\n  var foo = 'bar';\n  if (x) {\n  foo += 'baz';\n  } else {\n  foo += 's';\n   }\n  return foo;\n}", function(node){
+        var ast = rocambole.moonwalk("function fn(x){\n  var foo = 'bar';\n  if (x) {\n  foo += 'baz';\n  } else {\n  foo += 's';\n   }\n  return foo;\n}", function(){
             count++;
         });
         expect( ast.body ).not.to.be(undefined);
@@ -16,9 +20,9 @@ describe('moonwalk()', function () {
     });
 
     it('should work with existing AST', function () {
-        var ast = walker.parse("function fn(x){\n  var foo = 'bar';\n  if (x) {\n  foo += 'baz';\n  } else {\n  foo += 's';\n   }\n  return foo;\n}");
+        var ast = rocambole.parse("function fn(x){\n  var foo = 'bar';\n  if (x) {\n  foo += 'baz';\n  } else {\n  foo += 's';\n   }\n  return foo;\n}");
         var count = 0;
-        walker.moonwalk(ast, function(node){
+        rocambole.moonwalk(ast, function(){
             count++;
         });
         expect( count ).to.be.greaterThan( 1 );
@@ -28,7 +32,7 @@ describe('moonwalk()', function () {
         var prevDepth = Infinity;
         var count = 0;
         var prevNode;
-        var ast = walker.moonwalk("function fn(x){\n  var foo = 'bar';\n  if (x) {\n  foo += 'baz';\n  } else {\n  foo += 's';\n   }\n  return foo;\n}", function(node){
+        rocambole.moonwalk("function fn(x){\n  var foo = 'bar';\n  if (x) {\n  foo += 'baz';\n  } else {\n  foo += 's';\n   }\n  return foo;\n}", function(node){
             count++;
             expect( node.depth <= prevDepth ).to.be( true );
             prevDepth = node.depth;
@@ -44,13 +48,13 @@ describe('moonwalk()', function () {
 describe('recursive()', function () {
 
     it('should allow breaking the loop', function () {
-        var ast = walker.parse('function fn(x){ return x * 2 }');
+        var ast = rocambole.parse('function fn(x){ return x * 2 }');
         var count_1 = 0;
-        walker.recursive(ast, function(node){
+        rocambole.recursive(ast, function(){
             count_1 += 1;
         });
         var count_2 = 0;
-        walker.recursive(ast, function(node){
+        rocambole.recursive(ast, function(node){
             count_2 += 1;
             if (node.type === 'BlockStatement') {
                 return false; // break
