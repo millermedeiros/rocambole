@@ -280,6 +280,16 @@ describe('parse', function () {
             });
         });
 
+        it('should add originalIndent info to block comments', function () {
+            var ast = rocambole.parse('  /* foo */\n\t\t// bar');
+            expect( ast.startToken.next.originalIndent ).to.be('  ');
+        });
+
+        it('should not add originalIndent info to line comments', function () {
+            var ast = rocambole.parse('  /* foo */\n\t\t// bar');
+            expect( ast.endToken.originalIndent ).to.be(undefined);
+        });
+
     });
 
 

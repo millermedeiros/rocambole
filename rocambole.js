@@ -224,6 +224,11 @@ function instrumentTokens(ast, source){
         token.prev = i? result[i - 1] : undefined;
         token.next = result[i + 1];
         token.root = ast; // used internally
+        // original indent is very important for block comments since some
+        // transformations require manipulation of raw comment value
+        if (token.type === 'BlockComment' && token.prev) {
+          token.originalIndent = token.prev.value;
+        }
     }
 
     ast.tokens = result;

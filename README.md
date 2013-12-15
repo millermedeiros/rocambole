@@ -68,6 +68,10 @@ Each token also have:
  - `prev` : Token|undefined
  - `next` : Token|undefined
 
+BlockComment also have:
+
+  - `originalIndent`: String|undefined
+
 To get a better idea of the generated AST structure try out
 [rocambole-visualize](http://piuccio.github.io/rocambole-visualize/).
 
