@@ -1,6 +1,5 @@
  language: node_js
- node_js: 0.8
+ node_js: 0.10
  script:
    - "npm test --coverage"
-   - "node ./node_modules/.bin/istanbul check-coverage --statements 95 --branches 95 --lines 95 --functions 100"
 
