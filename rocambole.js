@@ -41,6 +41,7 @@ var _addLocInfo;
 // parse string and return an augmented AST
 exports.parse = function parse(source, opts){
     _addLocInfo = opts && opts.loc;
+    source = source.toString();
 
     var ast = esprima.parse(source, {
         loc : _addLocInfo,

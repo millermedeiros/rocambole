@@ -231,6 +231,7 @@ MIT
 
  - exports `BYPASS_RECURSION` (#8)
  - fix error if input is empty (#12)
+ - support anything that implements `toString()` as input (#13)
 
 ### v0.3.1 (2013/12/15)
 

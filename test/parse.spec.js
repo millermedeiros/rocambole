@@ -327,5 +327,19 @@ describe('parse', function () {
     });
 
 
+    describe('support anything that implements `toString` as input', function () {
+        it('should support arrays', function () {
+            var ast = rocambole.parse([1,2,3]);
+            expect(ast.body[0].toString()).to.eql('1,2,3');
+        });
+        it('should support functions', function () {
+            var ast = rocambole.parse(function doStuff(){
+                doStuff(1, 2);
+            });
+            expect(ast.body[0].type).to.be('FunctionDeclaration');
+        });
+    });
+
+
 });
 
