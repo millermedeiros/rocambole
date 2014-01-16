@@ -227,6 +227,10 @@ MIT
 
 ## Changelog
 
+### Next
+
+ - exports `BYPASS_RECURSION` (#8)
+
 ### v0.3.1 (2013/12/15)
 
  - fix `originalIndent` on `BlockComment` when prev token is not `WhiteSpace`.

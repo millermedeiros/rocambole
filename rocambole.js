@@ -8,7 +8,8 @@ var esprima = require('esprima');
 
 // ---
 
-var BYPASS_RECURSION = {
+// we expose the flags so other tools can tweak the values (#8)
+exports.BYPASS_RECURSION = {
     root : true,
     comments : true,
     tokens : true,
@@ -351,7 +352,7 @@ function recursiveWalk(node, fn, parent, prev, next){
 
         // only need to recurse real nodes and arrays
         // ps: typeof null == 'object'
-        if (!child || typeof child !== 'object' || BYPASS_RECURSION[key]) {
+        if (!child || typeof child !== 'object' || exports.BYPASS_RECURSION[key]) {
             continue;
         }
 

@@ -297,8 +297,11 @@ describe('parse', function () {
 
     });
 
-
-
+    describe('export BYPASS_RECURSION', function () {
+        it('should export BYPASS_RECURSION', function () {
+            expect( rocambole.BYPASS_RECURSION.root ).to.be(true);
+        });
+    });
 
 });
 
