@@ -49,7 +49,13 @@ exports.parse = function parse(source, opts){
         comment : true
     });
 
-    // ast.source = source;
+    // we augment just root node since program is "empty"
+    // can't check `ast.body.length` because it might contain just comments
+    if (!ast.tokens.length && !ast.comments.length) {
+        ast.depth = 0;
+        ast.startToken = ast.endToken = null;
+        return ast;
+    }
 
     instrumentTokens(ast, source);
 

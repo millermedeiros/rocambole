@@ -297,11 +297,35 @@ describe('parse', function () {
 
     });
 
+
     describe('export BYPASS_RECURSION', function () {
         it('should export BYPASS_RECURSION', function () {
             expect( rocambole.BYPASS_RECURSION.root ).to.be(true);
         });
     });
+
+
+    describe('empty program', function () {
+        it('should not throw if program is empty', function () {
+            expect(function(){
+                rocambole.parse('');
+            }).not.throwError();
+        });
+        it('should return augmented AST', function () {
+            var ast = rocambole.parse('');
+            expect(ast).to.eql({
+                type: 'Program',
+                body: [],
+                range: [0,0],
+                comments: [],
+                tokens: [],
+                startToken: null,
+                endToken: null,
+                depth: 0
+            });
+        });
+    });
+
 
 });
 

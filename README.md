@@ -230,6 +230,7 @@ MIT
 ### Next
 
  - exports `BYPASS_RECURSION` (#8)
+ - fix error if input is empty (#12)
 
 ### v0.3.1 (2013/12/15)
 
