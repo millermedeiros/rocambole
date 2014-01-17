@@ -227,7 +227,7 @@ MIT
 
 ## Changelog
 
-### Next
+### v0.3.2 (2014/01/17)
 
  - exports `BYPASS_RECURSION` (#8)
  - fix error if input is empty (#12)
