@@ -55,6 +55,7 @@ exports.parse = function parse(source, opts){
     if (!ast.tokens.length && !ast.comments.length) {
         ast.depth = 0;
         ast.startToken = ast.endToken = null;
+        ast.toString = _nodeProto.toString;
         return ast;
     }
 
@@ -102,6 +103,7 @@ var _nodeProto = {};
 _nodeProto.toString = function(){
     var str = '';
     var token = this.startToken;
+    if (!token) return str;
     do {
         str += ('raw' in token)? token.raw : token.value;
         token = token.next;

@@ -227,6 +227,10 @@ MIT
 
 ## Changelog
 
+### v0.3.3 (2014/04/26)
+
+ - add `toString` to empty programs AST (#16)
+
 ### v0.3.2 (2014/01/17)
 
  - exports `BYPASS_RECURSION` (#8)

@@ -319,10 +319,16 @@ describe('parse', function () {
                 range: [0,0],
                 comments: [],
                 tokens: [],
+                // we check toString behavior later
+                toString: ast.toString,
                 startToken: null,
                 endToken: null,
                 depth: 0
             });
+        });
+        it('toString should return proper value', function() {
+            var ast = rocambole.parse('');
+            expect(ast.toString()).to.be('');
         });
     });
 
