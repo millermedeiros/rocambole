@@ -42,6 +42,14 @@ describe('moonwalk()', function () {
         expect( prevNode.type ).to.be( 'Program' ); // reached root
     });
 
+    it('should skip null nodes', function(){
+      var count = 0;
+      rocambole.moonwalk('[,3,[,4]]', function () {
+        count++;
+      });
+      expect(count).to.be(6);
+    });
+
 });
 
 
