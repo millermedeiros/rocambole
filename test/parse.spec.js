@@ -295,6 +295,15 @@ describe('parse', function () {
             expect( ast.startToken.next.next.originalIndent ).to.be(undefined);
         });
 
+        it('should not add as originalIndent if prev token is not on a new line', function () {
+            var ast = rocambole.parse('lorem;  /* foo */\n\t\t// bar');
+            expect( ast.startToken.next.next.next.originalIndent ).to.be(undefined);
+        });
+
+        it('should add as originalIndent if on a new line', function () {
+            var ast = rocambole.parse('lorem;\n  /* foo */\n\t\t// bar');
+            expect( ast.startToken.next.next.next.next.originalIndent ).to.be('  ');
+        });
     });
 
 
