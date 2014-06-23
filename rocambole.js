@@ -75,6 +75,10 @@ exports.parse = function parse(source, opts){
 
     var toString = _nodeProto.toString;
     var instrumentNodes = function(node, parent, prev, next){
+        // sparse arrays might have `null` elements, so we skip those for now
+        // see issue #15
+        if (!node) return false;
+
         node.parent = parent;
         node.prev = prev;
         node.next = next;

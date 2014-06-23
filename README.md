@@ -227,6 +227,15 @@ MIT
 
 ## Changelog
 
+### v0.3.5 (2014/06/23)
+
+ - handle sparse arrays (eg. `[,]`). (#15)
+
+### v0.3.4 (2014/06/23)
+
+ - only add `BlockComment.originalIndent` if `WhiteSpace` is on the start of
+   a line.
+
 ### v0.3.3 (2014/04/26)
 
  - add `toString` to empty programs AST (#16)

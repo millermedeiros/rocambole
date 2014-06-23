@@ -356,5 +356,18 @@ describe('parse', function () {
     });
 
 
+    describe('sparse array', function() {
+      // yes, people shold not be writting code like this, but we should not
+      // bail when that happens
+      it('should not fail on sparse arrays', function() {
+        var ast = rocambole.parse('[,3,[,4]]');
+        expect(ast.toString()).to.eql('[,3,[,4]]');
+        var elements = ast.body[0].expression.elements;
+        expect(elements[0]).to.be(null);
+        expect(elements[1].type).to.be('Literal');
+        expect(elements[1].value).to.be(3);
+      });
+    });
+
 });
 
