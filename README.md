@@ -227,6 +227,10 @@ MIT
 
 ## Changelog
 
+### v0.3.6 (2014/06/23)
+
+ - really handle sparse arrays (eg. `[,]`), fixes moonwalk. (#15)
+
 ### v0.3.5 (2014/06/23)
 
  - handle sparse arrays (eg. `[,]`). (#15)
