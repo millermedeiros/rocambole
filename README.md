@@ -227,6 +227,11 @@ MIT
 
 ## Changelog
 
+### v0.4.0 (2014/07/14)
+
+ - aliased `rocambole.recursive` as `rocambole.walk` to avoid confusions.
+ - switched `esprima` dependency to `esprima-fb` because of ES6 features.
+
 ### v0.3.6 (2014/06/23)
 
  - really handle sparse arrays (eg. `[,]`), fixes moonwalk. (#15)
