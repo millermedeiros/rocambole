@@ -183,13 +183,13 @@ Traverse order:
 This behavior is very different from node-falafel and node-burrito.
 
 
-### rocambole.recursive
+### rocambole.walk / rocambole.recursive
 
 It loops through all nodes on the AST starting from the root node (`Program`),
 similar to `node-falafel`.
 
 ```js
-rocambole.recursive(ast, function(node){
+rocambole.walk(ast, function(node){
     console.log(node.type);
 });
 ```

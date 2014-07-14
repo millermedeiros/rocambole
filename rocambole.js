@@ -345,7 +345,7 @@ function getWhiteSpaces(source) {
 
 
 
-exports.recursive = recursiveWalk;
+exports.walk = exports.recursive = recursiveWalk;
 
 // heavily inspired by node-falafel
 // walk nodes recursively starting from root
