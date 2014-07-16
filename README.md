@@ -119,13 +119,12 @@ function update(node, str){
 
 ## Helpers
 
-I plan to create helpers as separate projects. For now I'm adding the helpers
-on the [esformatter util
-package](https://github.com/millermedeiros/esformatter/tree/master/lib/util)
-but I plan to extract the generic ones.
+I plan to create helpers as separate projects when possible.
 
- - [rocambole-token](https://github.com/millermedeiros/rocambole-token): helpers for token manipulation
+ - [rocambole-token](https://github.com/millermedeiros/rocambole-token): helpers for token manipulation/traversal
+ - [rocambole-node](https://github.com/millermedeiros/rocambole-node): helpers for node manipulation/traversal
 
+There are a few nice helpers on [esformatter](https://github.com/millermedeiros/esformatter/) to deal with indentation, white spaces and line breaks that might be useful.
 
 
 ## API
