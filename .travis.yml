@@ -2,4 +2,5 @@
  node_js: 0.10
  script:
    - "npm test --coverage"
-
+ git:
+   depth: 1
