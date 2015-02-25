@@ -30,7 +30,7 @@
   "author": "Miller Medeiros <http://blog.millermedeiros.com>",
   "license": "MIT",
   "dependencies": {
-    "esprima-fb": "^4001.3001.0-dev-harmony-fb"
+    "esprima": "^2.0"
   },
   "devDependencies": {
     "mocha": "~1.7",

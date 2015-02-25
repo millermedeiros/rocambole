@@ -2,7 +2,7 @@
 "use strict";
 
 
-var esprima = require('esprima-fb');
+var esprima = require('esprima');
 
 
 

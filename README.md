@@ -229,7 +229,7 @@ MIT
 ### next
 
  - aliased `rocambole.recursive` as `rocambole.walk` to avoid confusions.
- - switched `esprima` dependency to `esprima-fb` because of ES6 features.
+ - updated `esprima` to v2.0 because of ES6 features.
 
 ### v0.3.6 (2014/06/23)
 
