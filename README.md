@@ -226,10 +226,15 @@ MIT
 
 ## Changelog
 
-### next
+### v0.5.0 (2015/02/25)
+
+ - updated `esprima` to v2.0 because of ES6 features and to avoid `esprima-fb`
+   bug related to RegExp.
+
+### v0.4.0 (2014/07/14)
 
  - aliased `rocambole.recursive` as `rocambole.walk` to avoid confusions.
- - updated `esprima` to v2.0 because of ES6 features.
+ - switched `esprima` dependency to `esprima-fb` because of ES6 features.
 
 ### v0.3.6 (2014/06/23)
 
