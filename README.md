@@ -123,8 +123,9 @@ I plan to create helpers as separate projects when possible.
 
  - [rocambole-token](https://github.com/millermedeiros/rocambole-token): helpers for token manipulation/traversal
  - [rocambole-node](https://github.com/millermedeiros/rocambole-node): helpers for node manipulation/traversal
-
-There are a few nice helpers on [esformatter](https://github.com/millermedeiros/esformatter/) to deal with indentation, white spaces and line breaks that might be useful.
+ - [rocambole-whitespace](https://github.com/millermedeiros/rocambole-whitespace): helpers for whitespace manipulation
+ - [rocambole-linebreak](https://github.com/millermedeiros/rocambole-linebreak): helpers for line break manipulation
+ - [rocambole-indent](https://github.com/millermedeiros/rocambole-indent): helpers for indentation
 
 
 ## API
@@ -225,6 +226,11 @@ MIT
 
 
 ## Changelog
+
+### v0.5.1 (2015/03/19)
+
+ - make it compatible with esprima@2.1 (don't loop through the same CatchClause
+  twice).
 
 ### v0.5.0 (2015/02/25)
 
