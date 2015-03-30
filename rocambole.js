@@ -41,18 +41,28 @@ var _addLocInfo;
 
 // ---
 
+exports.parseFn = esprima.parse;
+exports.parseContext = esprima;
+// we need range/tokens/comment info to build the tokens linked list!
+exports.parseOptions = {
+    range: true,
+    tokens: true,
+    comment: true
+};
 
 // parse string and return an augmented AST
 exports.parse = function parse(source, opts){
-    _addLocInfo = opts && opts.loc;
+    opts = opts || {};
+    _addLocInfo = Boolean(opts.loc);
     source = source.toString();
 
-    var ast = esprima.parse(source, {
-        loc : _addLocInfo,
-        range : true,
-        tokens : true,
-        comment : true
+    Object.keys(exports.parseOptions).forEach(function(key) {
+        if (!(key in opts)) {
+            opts[key] = exports.parseOptions[key];
+        }
     });
+
+    var ast = exports.parseFn.call(exports.parseContext, source, opts);
 
     // we augment just root node since program is "empty"
     // can't check `ast.body.length` because it might contain just comments
