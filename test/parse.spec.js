@@ -324,6 +324,7 @@ describe('parse', function () {
             var ast = rocambole.parse('');
             expect(ast).to.eql({
                 type: 'Program',
+                sourceType: 'script',
                 body: [],
                 range: [0,0],
                 comments: [],
