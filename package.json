@@ -30,7 +30,7 @@
   "author": "Miller Medeiros <http://blog.millermedeiros.com>",
   "license": "MIT",
   "dependencies": {
-    "esprima": "^2.1"
+    "esprima": "~2.7.1"
   },
   "devDependencies": {
     "mocha": "~1.7",
