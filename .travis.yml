@@ -3,4 +3,5 @@
  node_js: stable
  script:
    - "npm test --coverage"
-
+ git:
+   depth: 1
