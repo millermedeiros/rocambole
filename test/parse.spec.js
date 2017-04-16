@@ -24,6 +24,12 @@ describe('parse', function () {
     });
 
 
+    it('should work with quirky arrays', function () {
+        var ast = rocambole.parse('(function(){ return [,][0] })');
+        // TODO: test result?
+    });
+
+
     it('should work with any kind of line breaks & spaces', function () {
         var ast = rocambole.parse('\nvar n\r\n=\n10;\r\r  \t\t  \n', {loc : true});
 
