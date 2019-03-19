@@ -30,7 +30,7 @@
   "author": "Miller Medeiros <http://blog.millermedeiros.com>",
   "license": "MIT",
   "dependencies": {
-    "esprima": "~2.7.1"
+    "esprima": "~4.0.0"
   },
   "devDependencies": {
     "expect.js": "0.2",
