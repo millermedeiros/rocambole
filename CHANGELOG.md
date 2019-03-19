@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.8.0 (2019/03/18)
+
+ - update `esprima` to 4.0.1 to handle async/await.
+ - remote `test/` files from deploy.
+
 ## v0.7.0 (2015/08/26)
 
  - Ignore TryStatement's "handlers" property in favor of "handler"
