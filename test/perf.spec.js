@@ -12,6 +12,7 @@ var _jqueryAST;
 
 
 describe('performance', function () {
+    this.timeout(10000);
 
     describe('rocambole.parse', function () {
         it('should be fast :P', function () {
